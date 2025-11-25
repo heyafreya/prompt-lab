@@ -1,0 +1,5 @@
+setup.py
+src/optimizers.egg-info/PKG-INFO
+src/optimizers.egg-info/SOURCES.txt
+src/optimizers.egg-info/dependency_links.txt
+src/optimizers.egg-info/top_level.txt
