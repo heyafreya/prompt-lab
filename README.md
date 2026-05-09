@@ -104,4 +104,8 @@ So far opencode is alright, I find that it is pretty bold with making changes. O
 
 Set up a `.pre-commit-config.yaml` file with basic hooks. One new one to me is `commitizen`, which is commit message validation. This is baked into pre-commit so I don't need to include it as a dependency in `dev-requirements.txt`.
 
+#### Auto Docs & Changelog
+
+Set up a GitHub Actions workflow that runs on push to `main`. It pulls the merged PR title and body, prepends a formatted entry to `CHANGELOG.md`, regenerates Sphinx docs from Python docstrings, and opens a reviewable PR with the updates. Wrapped auto-generated Sphinx output in `.gitignore` to avoid clutter.
+
 </details>
