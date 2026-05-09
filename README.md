@@ -15,7 +15,8 @@ Additionally, the project should do the following:
 - Conventional commits
 - Auto-magically generated documentation
 
-### 📆 24-Nov-2025
+<details>
+<summary><b>📆 24-Nov-2025</b></summary>
 
 Initial setup is loosely [following this guide](https://docs.python-guide.org/writing/structure/) on project structure. This seems outdated to me, since they're choosing to use `setup.py` and `requirements.txt` rather than `pyproject.toml`.
 
@@ -66,7 +67,10 @@ Other comments:
   )
   ```
 
-### 📆 26-Nov-2025
+</details>
+
+<details>
+<summary><b>📆 26-Nov-2025</b></summary>
 
 #### Packaging
 
@@ -85,7 +89,10 @@ Questions:
 
 - Should I gitignore `*.egg-info` files ????
 
-### 📆 08-May-2026
+</details>
+
+<details>
+<summary><b>📆 08-May-2026</b></summary>
 
 #### AI Tool Integrations
 
@@ -96,3 +103,5 @@ So far opencode is alright, I find that it is pretty bold with making changes. O
 #### Conventional Commits
 
 Set up a `.pre-commit-config.yaml` file with basic hooks. One new one to me is `commitizen`, which is commit message validation. This is baked into pre-commit so I don't need to include it as a dependency in `dev-requirements.txt`.
+
+</details>
