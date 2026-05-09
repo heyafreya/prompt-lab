@@ -1,2 +1,5 @@
 .env
 .venv
+docs/_build/
+docs/modules.rst
+docs/src.rst
