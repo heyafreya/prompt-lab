@@ -26,12 +26,12 @@ jobs:
             BODY=$(gh pr view "$PR_NUM" --json body --jq '.body' | sed '/^$/q' | head -3)
             DATE=$(git log --merges -1 --format="%as")
             HEADER="# Changelog"
-            ENTRY=$(printf "## %s\n\n### %s (#%s)\n\n%s\n" "$DATE" "$TITLE" "$PR_NUM" "$BODY")
+            ENTRY=$(printf "## %s\n\n### %s (#%s)\n\n%s" "$DATE" "$TITLE" "$PR_NUM" "$BODY")
           else
             HEADER="# Changelog"
-            ENTRY=$(git log --no-merges -1 --format="## %as\n\n- %s")
+            ENTRY=$(git log --no-merges -1 --format="## %as%n%n- %s")
           fi
-          printf "%s\n\n%s\n%s" "$HEADER" "$ENTRY" "$(tail -n +3 CHANGELOG.md 2>/dev/null || true)" > CHANGELOG.md
+          printf "%s\n\n%s\n\n%s\n" "$HEADER" "$ENTRY" "$(tail -n +3 CHANGELOG.md 2>/dev/null || true)" > CHANGELOG.md
 
       - name: Setup Python
         uses: actions/setup-python@v5
