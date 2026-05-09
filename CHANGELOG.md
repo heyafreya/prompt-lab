@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-05-09
+
+### feat: auto docs and changelog generation (#4)
+
+- Adds a GitHub workflow that generates changelog and rebuilds Sphinx docs on merge to `main`
+- Creates a separate PR with the generated changes for manual review
+- Populates the Sphinx config (`docs/conf.py`, `docs/index.rst`)
+
 ## 2026-05-08
 
 ### feat: add auto docs and changelog generation (#4)
