@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-05-09
+
+### feat: auto docs and changelog generation (#4)
+
+## Summary
+
 ## 2026-05-08
 
 ### feat: add auto docs and changelog generation (#4)
