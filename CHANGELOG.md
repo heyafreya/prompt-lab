@@ -2,6 +2,10 @@
 
 ## 2026-05-08
 
+- feat: add auto docs and changelog generation
+
+## 2026-05-08
+
 ### feat: add auto docs and changelog generation (#4)
 
 Adds a GitHub workflow that generates a changelog entry and rebuilds Sphinx docs on merge to main, then opens a PR for review.
