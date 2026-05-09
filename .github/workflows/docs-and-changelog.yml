@@ -1,0 +1,66 @@
+name: Auto Docs & Changelog
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Update changelog
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PR_NUM=$(git log --merges -1 --format="%s" | sed -n 's/.*#\([0-9]*\).*/\1/p')
+          if [ -n "$PR_NUM" ]; then
+            TITLE=$(gh pr view "$PR_NUM" --json title --jq '.title')
+            BODY=$(gh pr view "$PR_NUM" --json body --jq '.body' | sed '/^$/q' | head -3)
+            DATE=$(git log --merges -1 --format="%as")
+            HEADER="# Changelog"
+            ENTRY=$(printf "## %s\n\n### %s (#%s)\n\n%s\n" "$DATE" "$TITLE" "$PR_NUM" "$BODY")
+          else
+            HEADER="# Changelog"
+            ENTRY=$(git log --no-merges -1 --format="## %as\n\n- %s")
+          fi
+          printf "%s\n\n%s\n%s" "$HEADER" "$ENTRY" "$(tail -n +3 CHANGELOG.md 2>/dev/null || true)" > CHANGELOG.md
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install doc dependencies
+        run: |
+          pip install sphinx
+
+      - name: Build HTML docs
+        run: |
+          sphinx-apidoc -o docs/ optimizers/src/ --force
+          sphinx-build -b html docs/ docs/_build/html
+
+      - name: Create PR with updates
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BRANCH="docs/auto-update-$(date +%s)"
+          git checkout -b "$BRANCH"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md docs/
+          git diff --staged --quiet && echo "No changes" && exit 0
+          git commit -m "chore: auto-update changelog and docs [skip ci]"
+          git push origin "$BRANCH"
+          gh pr create \
+            --title "chore: auto-update changelog and docs" \
+            --body "Auto-generated update." \
+            --head "$BRANCH" \
+            --base main
