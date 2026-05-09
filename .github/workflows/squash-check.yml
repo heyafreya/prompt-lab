@@ -1,0 +1,24 @@
+name: Squash Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check-commits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check PR has exactly one commit
+        run: |
+          COMMIT_COUNT=${{ github.event.pull_request.commits }}
+          if [ "$COMMIT_COUNT" -ne 1 ]; then
+            echo "❌ PR has $COMMIT_COUNT commits. Please squash to a single commit."
+            echo "   Run: git rebase -i HEAD~$COMMIT_COUNT"
+            echo "   Or:  git reset --soft origin/main && git commit"
+            exit 1
+          fi
+          echo "✅ PR has exactly 1 commit."
