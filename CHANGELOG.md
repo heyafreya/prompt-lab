@@ -1,5 +1,6 @@
 # Changelog
 
+## 2026-05-08\n\n- chore: ignore auto-generated sphinx docs
 ## 2026-05-09
 
 ### feat: add auto docs and changelog generation (#4)
