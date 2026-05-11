@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-05-11
+
+### feat: add Makefile for dev environment management (#15)
+
+Common targets:
+- `make install` creates venv + installs deps
+- `make dev-install` includes Sphinx
+
 ## 2026-05-09
 
 ### feat: auto docs and changelog generation (#4)
