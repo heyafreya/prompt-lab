@@ -27,7 +27,7 @@ jobs:
           if [ -n "$PR_NUM" ]; then
             TITLE=$(gh pr view "$PR_NUM" --json title --jq '.title')
             MERGE_TIME=$(gh pr view "$PR_NUM" --json mergedAt --jq '.mergedAt')
-            DATE=$(TZ=America/New_York python3 -c "from datetime import datetime; d=datetime.fromisoformat('$MERGE_TIME'.replace('Z','+00:00')); print(d.strftime('%Y-%m-%d'))")
+            DATE=$(python3 -c "import os; os.environ['TZ']='America/New_York'; import time; time.tzset(); from datetime import datetime; d=datetime.fromisoformat('$MERGE_TIME'.replace('Z','+00:00')).astimezone(); print(d.strftime('%Y-%m-%d'))")
             BODY=$(gh pr view "$PR_NUM" --json body --jq '.body' | grep -v '^#' | grep -v '^[[:space:]]*$' | head -3)
             HEADER="# Changelog"
             ENTRY=$(printf "## %s\n\n### %s (#%s)\n\n%s" "$DATE" "$TITLE" "$PR_NUM" "$BODY")
