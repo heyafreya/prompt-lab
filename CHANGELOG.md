@@ -2,6 +2,12 @@
 
 ## 2026-05-11
 
+### fix: correct changelog date conversion to EST (#14)
+
+Python's strftime on an aware datetime doesn't respect the TZ env var. Added astimezone() call and tzset() to properly convert UTC merge dates to America/New_York.
+
+## 2026-05-11
+
 ### feat: add Makefile for dev environment management (#15)
 
 Common targets:
