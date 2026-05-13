@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-05-12
+
+### feat(db): add SQLite setup with prompt optimizer schema (#18)
+
+- Adds SQLite database with schema for prompt optimization and active learning pipeline
+- Creates `db.py` with tables for models, prompts, prompt_versions, experiments, metrics, datasets
+- Initializes `prompt_lab.db` database file
+
 ## 2026-05-11
 
 ### fix: correct changelog date conversion to EST (#14)
