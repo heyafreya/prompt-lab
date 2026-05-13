@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-05-12
+
+### Docs: readme update may 10-12 (#20)
+
+Updates on:
+* Consistency
+* Makefile and date stamp bugfix
+
 ## 2026-05-11
 
 ### fix: correct changelog date conversion to EST (#14)
