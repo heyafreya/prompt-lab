@@ -52,6 +52,7 @@ Other comments:
   - javascript: `npm install openai`
   - .NET: `dotnet add package OpenAI`
   - java (Maven dep):
+
   ```
       <dependency>
           <groupId>com.openai</groupId>
@@ -61,6 +62,7 @@ Other comments:
   ```
 
   - Go:
+
   ```
   import (
       "github.com/openai/openai-go" // imported as openai
@@ -104,8 +106,55 @@ So far opencode is alright, I find that it is pretty bold with making changes. O
 
 Set up a `.pre-commit-config.yaml` file with basic hooks. One new one to me is `commitizen`, which is commit message validation. This is baked into pre-commit so I don't need to include it as a dependency in `dev-requirements.txt`.
 
+#### Squash Merge
+
+Set up a GHA workflow to validate that a PR to main requires a squash merge.
+
 #### Auto Docs & Changelog
 
 Set up a GitHub Actions workflow that runs on push to `main`. It pulls the merged PR title and body, prepends a formatted entry to `CHANGELOG.md`, regenerates Sphinx docs from Python docstrings, and opens a reviewable PR with the updates. Wrapped auto-generated Sphinx output in `.gitignore` to avoid clutter.
+
+</details>
+
+<details>
+<summary><b>📆 10-May-2026</b></summary>
+
+#### Consistency
+
+Unfortunately I already broke my contribution streak and skipped a day, whoops.
+
+I found that the Big Pickle model 'thinks' a lot, kind of emotionally... and it will rush to committing or even pushing changes despite me explicitly defining a rule to ask me for approval before making a change. And then, it will realize its mistake and apologize... But by then it's too late!
+
+#### Makefile Env Management and Changelog Date Bugfix
+
+Collaborated with opencode to generate a makefile and fix a date parsing bug.
+
+</details>
+
+<details>
+<summary><b>📆 12-May-2026</b></summary>
+
+#### Database Setup
+
+DB setup to learn more about this process - did some research on use cases for PostgreSQL, MySQL, MongoDB, Redis, BigQuery, Kafka, and Spark, and SQLite with opencode's MiniMax M2.5. Landed on SQLite for several reasons:
+
+- Zero config - it's just a single file, no server process required
+- Free - no hosting costs, no usage limits
+- VSCode extension support - there are several that let you browse and query directly in the editor
+- Sufficient for learning - handles concurrent reads well, good for single-user prototyping
+
+Here is a brief summary on why other choices do not meet this project's current needs:
+
+- **PostgreSQL** - the "gold standard" but the docs are dense and assume prior knowledge. It also needs more tuning for optimal performance. I'd consider it if we needed complex queries, JSONB, or extensions like pgvector.
+- **MySQL** - battle-tested but less JSON support than Postgres, and less feature-rich overall.
+- **MongoDB** - the free Atlas tier is only 512MB which is pretty tight. Also, Postgres's JSONB has caught up to handle most document-style workloads now.
+- **Redis** - it's not a primary database, more of a cache/session layer. Good to add later for caching expensive queries.
+- **BigQuery, Kafka, Spark** - these are all overkill. BigQuery is an analytical warehouse (not transactional), Kafka is for event streaming, and Spark is for petabyte-scale distributed processing.
+
+Thinking about future requirements, if we hit SQLite's limits (concurrent write contention, need for replication, or we want extensions like pgvector for AI work), migrating to PostgreSQL is straightforward. The schema is designed the same way, and tools like `pgloader` or an ORM like SQLAlchemy handle most of the heavy lifting. For a project our size, it should take a few hours at most rather than days...
+
+#### Auto README Updates
+
+Brainstormed with opencode about automatically updating this README from PR merges. The workflow itself would be simple to add to the existing docs-changelog YAML since they're both per-feature updates. However, to get the kind of rich summaries I want (analyzing code diffs to write descriptions), we'd need AI integration, which adds complexity I don't have time for right now. Added to the backlog.
 
 </details>
