@@ -158,3 +158,14 @@ Thinking about future requirements, if we hit SQLite's limits (concurrent write 
 Brainstormed with opencode about automatically updating this README from PR merges. The workflow itself would be simple to add to the existing docs-changelog YAML since they're both per-feature updates. However, to get the kind of rich summaries I want (analyzing code diffs to write descriptions), we'd need AI integration, which adds complexity I don't have time for right now. Added to the backlog.
 
 </details>
+
+<details>
+<summary><b>📆 13-May-2026</b></summary>
+
+#### Prompt CRUD
+
+Added CRUD operations for prompts in the database. Created functions to create, read, update, and delete prompts, plus version history tracking (saves previous versions when updating). It's verbose using raw sqlite3 - each function opens a connection, queries, commits, and closes manually. Considering switching to SQLAlchemy to clean this up and level up my ORM skills.
+
+</details>
+
+</details>
