@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-05-13
+
+### feat(db): add prompt CRUD operations with version history (#22)
+
+- Add CRUD functions for prompts: create_prompt, get_prompt, get_all_prompts, update_prompt, delete_prompt
+- Add get_prompt_versions to retrieve version history
+- Update creates version history entry in prompt_versions table
+
 ## 2026-05-12
 
 ### feat(db): add SQLite setup with prompt optimizer schema (#18)
