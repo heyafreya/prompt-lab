@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-05-16
+
+### refactor(db): separate queries module with JOIN queries (#26)
+
+- Split `db.py` into `db.py` (connection + schema) and `queries.py` (query functions)
+- Added JOIN queries to combine experiments with prompt/model names
+- Added aggregation queries for model/prompt stats
+
 ## 2026-05-15
 
 ### docs(db): add comprehensive code annotations (#24)
