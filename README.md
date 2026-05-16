@@ -168,4 +168,13 @@ Added CRUD operations for prompts in the database. Created functions to create, 
 
 </details>
 
+<details>
+<summary><b>📆 16-May-2026</b></summary>
+
+#### Database Queries Refactor
+
+Split `db.py` into two modules: `db.py` for connection + schema init (single responsibility), and `queries.py` for all query functions. Added JOIN queries to combine experiments with prompt/model names, plus aggregation queries for model/prompt stats. This separates low-level DB config from app-level queries - a common pattern in Python projects. Still using raw sqlite3 to learn SQL.
+
+</details>
+
 </details>

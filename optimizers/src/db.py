@@ -85,74 +85,38 @@ def init_db():
     conn.commit()
     conn.close()
 
-def create_prompt(name: str, content: str, description: str = None) -> int:
+def seed_data():
     conn = get_db()
-    cursor = conn.execute(
-        "INSERT INTO prompts (name, content, description) VALUES (?, ?, ?)",
-        (name, content, description)
-    )
+
+    conn.execute("INSERT OR IGNORE INTO models (name, provider) VALUES ('gpt-4', 'openai')")
+    conn.execute("INSERT OR IGNORE INTO models (name, provider) VALUES ('claude-3', 'anthropic')")
+    conn.execute("INSERT OR IGNORE INTO models (name, provider) VALUES ('gemini-pro', 'google')")
+
+    conn.execute("INSERT OR IGNORE INTO prompts (name, content, description) VALUES ('summarizer', 'Summarize this: ', 'Summarizes text')")
+    conn.execute("INSERT OR IGNORE INTO prompts (name, content, description) VALUES ('coder', 'Write code for: ', 'Code generation')")
+    conn.execute("INSERT OR IGNORE INTO prompts (name, content, description) VALUES ('explainer', 'Explain like I''m 5: ', 'Simple explanations')")
+
     conn.commit()
-    prompt_id = cursor.lastrowid
-    conn.close()
-    return prompt_id
 
-def get_prompt(prompt_id: int) -> dict | None:
-    conn = get_db()
-    row = conn.execute("SELECT * FROM prompts WHERE id = ?", (prompt_id,)).fetchone()
-    conn.close()
-    return dict(row) if row else None
-
-def get_all_prompts() -> list[dict]:
-    conn = get_db()
-    rows = conn.execute("SELECT * FROM prompts ORDER BY updated_at DESC").fetchall()
-    conn.close()
-    return [dict(row) for row in rows]
-
-def update_prompt(prompt_id: int, name: str = None, content: str = None, description: str = None) -> bool:
-    conn = get_db()
-    prompt = conn.execute("SELECT * FROM prompts WHERE id = ?", (prompt_id,)).fetchone()
-    if not prompt:
-        conn.close()
-        return False
-
-    new_name = name if name is not None else prompt["name"]
-    new_content = content if content is not None else prompt["content"]
-    new_description = description if description is not None else prompt["description"]
+    for p in range(1, 4):
+        for m in range(1, 4):
+            for i in range(2):
+                conn.execute("""
+                    INSERT INTO experiments (prompt_id, model_id, input_text, output_text, latency_ms, tokens_used, status)
+                    VALUES (?, ?, ?, ?, ?, ?, 'completed')
+                """, (p, m, f"input {i}", f"output {i}", 100 + p*50 + m*10 + i*20, 50 + i*10))
 
     conn.execute("""
-        UPDATE prompts
-        SET name = ?, content = ?, description = ?, updated_at = CURRENT_TIMESTAMP
-        WHERE id = ?
-    """, (new_name, new_content, new_description, prompt_id))
-    conn.commit()
+        INSERT INTO metrics (experiment_id, response_time_ms, token_count, cost_usd, quality_score)
+        SELECT id, latency_ms, tokens_used, tokens_used * 0.0001, 0.5 + RANDOM() * 0.5
+        FROM experiments
+    """)
 
-    version_num = conn.execute(
-        "SELECT COALESCE(MAX(version), 0) + 1 as v FROM prompt_versions WHERE prompt_id = ?",
-        (prompt_id,)
-    ).fetchone()["v"]
-    conn.execute("INSERT INTO prompt_versions (prompt_id, version, content) VALUES (?, ?, ?)",
-                 (prompt_id, version_num, prompt["content"]))
     conn.commit()
     conn.close()
-    return True
-
-def delete_prompt(prompt_id: int) -> bool:
-    conn = get_db()
-    cursor = conn.execute("DELETE FROM prompts WHERE id = ?", (prompt_id,))
-    conn.commit()
-    deleted = cursor.rowcount > 0
-    conn.close()
-    return deleted
-
-def get_prompt_versions(prompt_id: int) -> list[dict]:
-    conn = get_db()
-    rows = conn.execute(
-        "SELECT * FROM prompt_versions WHERE prompt_id = ? ORDER BY version DESC",
-        (prompt_id,)
-    ).fetchall()
-    conn.close()
-    return [dict(row) for row in rows]
+    print("Seed data added!")
 
 if __name__ == "__main__":
     init_db()
-    print(f"Database initialized at {DB_PATH}")
+    seed_data()
+    print(f"Database ready at {DB_PATH}")
