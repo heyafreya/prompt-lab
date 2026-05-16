@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-05-15
+
+### docs(db): add comprehensive code annotations (#24)
+
+Add detailed inline documentation explaining each component of the database layer:
+- **Connection handling**: get_db() purpose and row_factory
+- **Schema initialization**: Explains each table and its columns
+
 ## 2026-05-13
 
 ### feat(db): add prompt CRUD operations with version history (#22)
